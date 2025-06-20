@@ -3,23 +3,17 @@ import random
 import string
 from pathlib import Path
 
-
-
-
-
-
-
 class Bank:
     database ='database.json'
     data=[]
     try:
-        if Path(database).exists(0):
+        if Path(database).exists():
             with open(database,'r') as fs:
                 data = json.loads(fs.read())
         else:
             print("no such file exist")
     except Exception as err:
-        print("an exception occured as {err}")
+        print(f"an exception occured as {err}")
         
     @classmethod
     def __update(cls):
@@ -34,10 +28,7 @@ class Bank:
         id = alpha + num + spchar
         random.shuffle(id)
         return "".join(id)
-    
-        
-        
-        
+   
         
     def Createaccount(self):
         
@@ -70,7 +61,7 @@ class Bank:
         
         userdata = [i for i in Bank.data if i['accountNo.'] == accnumber and i['pin'] == pin]
         
-        if userdata == False:
+        if not userdata:
             print("Sorry no data found")
             
         else:
@@ -95,7 +86,7 @@ class Bank:
             print("Sorry no data found")
             
         else:
-            amount = int(input("Enter the amount you want to deposit: "))
+            amount = int(input("Enter the amount you want to withdraw: "))
             if userdata[0]['balance'] < amount :
                 print("Sorry not sufficient balance")
             else:
@@ -139,7 +130,7 @@ class Bank:
             if newdata["name"] =="":
                 newdata["name"] = userdata[0]['name']
             if newdata["email"] =="":
-                newdata["email"] = userdata[0]['pin']
+                newdata["email"] = userdata[0]['email']
             if newdata["pin"] =="":
                 newdata["pin"] = userdata[0]['pin']
                 
@@ -148,8 +139,13 @@ class Bank:
             newdata['accountNo.'] = userdata[0]['accountNo.']
             newdata['balance'] = userdata[0]['balance']
             
-            if newdata['pin'] == str:
+            # if newdata['pin'] == str:
+            #     newdata['pin'] = int(newdata['pin'])
+            if isinstance(newdata['pin'], str):
                 newdata['pin'] = int(newdata['pin'])
+ 
+                
+                
                 
             for i in newdata:
                 if newdata[i] == userdata[0][i]:
@@ -180,9 +176,6 @@ class Bank:
                 Bank.__update()      
             
           
-
-
-
 user = Bank()
 print("Press 1 for creating an account")
 print("Press 2 for depositing the money in bank")
